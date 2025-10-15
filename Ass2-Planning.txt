@@ -1,0 +1,33 @@
+REST API App (assignment 2)
+
+!! Use XML Layout/Kotlin !!
+
+- kotlin code
+
+	- create retrofit object (using DI)
+
+	- get token from API
+		1. Prompt for User and Pass from Login page
+		2. send post request to API endpoint with User and Pass, send in Body of Post request in JSON format
+		3. store auth token (use DI?)
+		4. log auth token for testing
+	
+	- get data from API
+	
+	- Generate RecyclerView from data
+	
+	- 
+	
+	
+- tests
+
+	- Unit Tests
+	
+		- retrofit tests:
+			- test retrofit object creation
+			- test get token from API
+			- test get data from API
+		
+		- test DI
+		
+		- test recyclerView
