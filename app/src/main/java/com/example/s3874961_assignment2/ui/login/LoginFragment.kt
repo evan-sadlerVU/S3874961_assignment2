@@ -8,10 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.s3874961_assignment2.R
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -35,14 +40,29 @@ class LoginFragment : Fragment() {
             // get the text from the fields
             val username = usernameField.text.toString()
             val password = passwordField.text.toString()
-
             Log.d("LoginFragment", "login button clicked for user: $username")
             // call the login function in the view model
             viewModel.onLoginClicked(username, password)
-
         }
-
-
+        // observe state flow to handle navigation and error messages.
+        observeUiEvents()
+    }
+    private fun observeUiEvents() {
+        //launch a coroutine in the lifecycle scope
+        lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
+                //collect the data from the state flow
+                viewModel.navigateToDashboard.collect { loginResponse ->
+                    // if the response is not null, navigate to the dashboard.
+                    loginResponse?.let {
+                        Log.d("LoginFragment", "Navigating to dashboard with keypass: ${loginResponse.keypass}")
+                        val action = LoginFragmentDirections.actionLoginFragmentToDashboardFragment(loginResponse.keypass)
+                        findNavController().navigate(action)
+                        viewModel.onNavigationComplete()
+                    }
+                }
+            }
+        }
 
     }
 }
