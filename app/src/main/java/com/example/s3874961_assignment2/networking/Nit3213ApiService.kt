@@ -5,6 +5,7 @@ import com.example.s3874961_assignment2.data.*
 import retrofit2.http.*
 
 interface Nit3213ApiService {
+    // post request to login endpoint, returns the keypass used to access the provided data
     @POST("footscray/auth")
     suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
 }

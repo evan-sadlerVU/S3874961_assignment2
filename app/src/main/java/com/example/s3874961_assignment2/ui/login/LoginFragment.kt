@@ -1,0 +1,48 @@
+//Fragment for login screen
+package com.example.s3874961_assignment2.ui.login
+
+import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import com.example.s3874961_assignment2.R
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
+
+@AndroidEntryPoint
+class LoginFragment : Fragment() {
+    private val viewModel: LoginViewModel by viewModels()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState:
+    Bundle?): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_login, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // find the Ui components using findViewById
+        val loginButton = view.findViewById<MaterialButton>(R.id.loginButton)
+        val usernameField = view.findViewById<TextInputEditText>(R.id.usernameField)
+        val passwordField = view.findViewById<TextInputEditText>(R.id.passwordField)
+
+        loginButton.setOnClickListener {
+            // get the text from the fields
+            val username = usernameField.text.toString()
+            val password = passwordField.text.toString()
+
+            Log.d("LoginFragment", "login button clicked for user: $username")
+            // call the login function in the view model
+            viewModel.onLoginClicked(username, password)
+
+        }
+
+
+
+    }
+}
