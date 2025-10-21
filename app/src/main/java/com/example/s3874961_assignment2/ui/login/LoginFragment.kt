@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -35,19 +36,23 @@ class LoginFragment : Fragment() {
         val loginButton = view.findViewById<MaterialButton>(R.id.loginButton)
         val usernameField = view.findViewById<TextInputEditText>(R.id.usernameField)
         val passwordField = view.findViewById<TextInputEditText>(R.id.passwordField)
+        val errorTextView = view.findViewById<TextView>(R.id.errorTextView)
+
 
         loginButton.setOnClickListener {
             // get the text from the fields
             val username = usernameField.text.toString()
             val password = passwordField.text.toString()
             Log.d("LoginFragment", "login button clicked for user: $username")
+            errorTextView.visibility = View.GONE
             // call the login function in the view model
             viewModel.onLoginClicked(username, password)
         }
         // observe state flow to handle navigation and error messages.
-        observeUiEvents()
+        observeUiEvents(errorTextView)
     }
-    private fun observeUiEvents() {
+    private fun observeUiEvents(errorTextView: TextView) {
+
         //launch a coroutine in the lifecycle scope
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -60,6 +65,17 @@ class LoginFragment : Fragment() {
                         findNavController().navigate(action)
                         viewModel.onNavigationComplete()
                     }
+                }
+            }
+
+        }
+        // handle error messages
+        lifecycleScope.launch {
+            viewModel.loginError.collect { msg ->
+                if (msg != null) {
+                    errorTextView.text = "Invalid username or Password"
+                    errorTextView.visibility = View.VISIBLE
+                    viewModel.onErrorShown()
                 }
             }
         }
