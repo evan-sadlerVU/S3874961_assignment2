@@ -22,5 +22,17 @@
         <argument
             android:name="keypass"
             app:argType="string"/>
+        <action
+            android:id="@+id/action_dashboardFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.s3874961_assignment2.ui.details.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="responseitem"
+            app:argType="com.example.s3874961_assignment2.data.DashboardResponseItem"/>
     </fragment>
 </navigation>

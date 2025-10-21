@@ -8,7 +8,6 @@ interface Nit3213ApiService {
     // post request to login endpoint, returns the keypass used to access the provided data
     @POST("footscray/auth")
     suspend fun login(@Body loginRequest: LoginRequest): LoginResponse
-    // get request to dashboard endpoint, returns the dashboard data as a list of maps
     @GET("dashboard/{keypass}")
-    suspend fun getDashboard(@Path("keypass") keypass: String): DashboardResponse
+    suspend fun getDashboardRawMap(@Path("keypass") keypass: String): Map<String, Any?>
 }

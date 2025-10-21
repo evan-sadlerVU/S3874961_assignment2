@@ -4,14 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.s3874961_assignment2.R
+import com.example.s3874961_assignment2.data.DashboardResponseItem
 
 class DashboardRecyclerViewAdaptor(
-    private val onItemClick: ((Map<String, Any?>) -> Unit)? = null
+    private val onItemClick: ((DashboardResponseItem) -> Unit)? = null
 ) : RecyclerView.Adapter<DashboardRecyclerViewHolder>() {
 
-    private val items = mutableListOf<Map<String, Any?>>()
+    private val items = mutableListOf<DashboardResponseItem>()
 
-    fun setData(data: List<Map<String, Any?>>) {
+    fun setData(data: List<DashboardResponseItem>) {
         items.clear()
         items.addAll(data)
         notifyDataSetChanged()

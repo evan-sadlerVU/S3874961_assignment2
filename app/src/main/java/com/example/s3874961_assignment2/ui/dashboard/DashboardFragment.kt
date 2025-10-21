@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,9 +49,10 @@ class DashboardFragment : Fragment() {
         val recycler = view.findViewById<RecyclerView>(R.id.recyclerDashboard)
         recycler.layoutManager = LinearLayoutManager(requireContext())
         adapter = DashboardRecyclerViewAdaptor(
-            onItemClick = {
+            onItemClick = { item ->
                 // Handle item click here
-                Log.d("DashboardFragment", "Item clicked: $it")
+                val action = DashboardFragmentDirections.actionDashboardFragmentToDetailsFragment(item)
+                findNavController().navigate(action)
             }
         )
         recycler.adapter = adapter

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.s3874961_assignment2.data.DashboardRepository
+import com.example.s3874961_assignment2.data.DashboardResponseItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +18,7 @@ class DashboardViewModel @Inject constructor(
 ) : ViewModel() {
     data class UiState(
         val loading: Boolean = false,
-        val items: List<Map<String, Any?>> = emptyList(),
+        val items: List<DashboardResponseItem> = emptyList(),
         val error: String? = null
     )
     private val _uiState = MutableStateFlow(UiState())
@@ -28,9 +29,9 @@ class DashboardViewModel @Inject constructor(
             _uiState.update { it.copy(loading = true, error = null) }
             try {
                 //call the dashboard repository to get the dashboard data
-                val dashboardResponse = dashboardRepository.getDashboard(keypass)
+                val dashboardResponse = dashboardRepository.getItems(keypass)
                 Log.d("DashboardViewModel", "Dashboard response: $dashboardResponse")
-                _uiState.update { it.copy(loading = false, items = dashboardResponse.entities) }
+                _uiState.update { it.copy(loading = false, items = dashboardResponse) }
             } catch (e: Exception) {
                 Log.e("DashboardViewModel", "Dashboard failed", e)
             }

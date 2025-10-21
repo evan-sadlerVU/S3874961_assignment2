@@ -9,8 +9,10 @@ import javax.inject.Singleton
 class DashboardRepository @Inject constructor(
     private val apiService: Nit3213ApiService
 ){
-    suspend fun getDashboard(keypass: String): DashboardResponse {
-        return apiService.getDashboard(keypass)
+    @Suppress("UNCHECKED_CAST")
+    suspend fun getItems(key: String): List<DashboardResponseItem> {
+        val raw = apiService.getDashboardRawMap(key)
+        val entities = (raw["entities"] as? List<Map<String, Any?>>).orEmpty()
+        return entities.map { DashboardResponseItem(LinkedHashMap(it)) }
     }
-
 }
