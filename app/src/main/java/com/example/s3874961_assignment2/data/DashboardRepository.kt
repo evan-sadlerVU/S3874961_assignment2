@@ -9,7 +9,7 @@ import javax.inject.Singleton
 class DashboardRepository @Inject constructor(
     private val apiService: Nit3213ApiService
 ){
-    suspend fun getDashboard(keypass: String): List <DashboardResponseItem> {
+    suspend fun getDashboard(keypass: String): DashboardResponse {
         return apiService.getDashboard(keypass)
     }
 

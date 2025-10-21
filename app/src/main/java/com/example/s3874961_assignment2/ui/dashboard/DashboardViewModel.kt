@@ -12,12 +12,18 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val dashboardRepository: DashboardRepository
 ) : ViewModel() {
-    fun fetchDashboardData(){
+    fun fetchDashboardData(keypass: String){
         viewModelScope.launch {
             try {
-                // TODO: REMOVE TEMP KEYPASS USE ACTUAL KEYPASS FROM LOGIN RESPONSE
-                val dashboardResponse = dashboardRepository.getDashboard("animals")
+                //call the dashboard repository to get the dashboard data
+                val dashboardResponse = dashboardRepository.getDashboard(keypass)
                 Log.d("DashboardViewModel", "Dashboard response: $dashboardResponse")
+                // TODO: remove this test code, just prints all the responses as individual items
+                for (item in dashboardResponse.entities) {
+                    for ((key, value) in item) {
+                        Log.d("DashboardViewModel", "Key: $key, Value: $value")
+                    }
+                }
             } catch (e: Exception) {
                 Log.e("DashboardViewModel", "Dashboard failed", e)
             }

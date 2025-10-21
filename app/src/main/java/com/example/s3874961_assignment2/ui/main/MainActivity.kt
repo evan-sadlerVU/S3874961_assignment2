@@ -21,13 +21,5 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
-
-        // display the login fragment
-        supportFragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
-            .add(R.id.MainFragmentContainer, LoginFragment::class.java, null)
-            .commit()
-
     }
 }
