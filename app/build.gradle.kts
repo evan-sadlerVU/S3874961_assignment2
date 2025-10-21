@@ -85,6 +85,7 @@ dependencies {
     /*-Fragment Dependencies-*/
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.fragment:fragment-ktx:1.8.3")
+    testImplementation(kotlin("test"))
 }
 
 kapt {
