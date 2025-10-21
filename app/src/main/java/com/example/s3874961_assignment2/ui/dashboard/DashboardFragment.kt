@@ -7,9 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.s3874961_assignment2.R
+import com.example.s3874961_assignment2.ui.dashboard.recyclerview.DashboardRecyclerViewAdaptor
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
@@ -17,6 +25,10 @@ class DashboardFragment : Fragment() {
     private val args: DashboardFragmentArgs by navArgs()
     //Associate the appropriate viewmodel with this fragment
     private val viewModel: DashboardViewModel by viewModels()
+
+    private lateinit var adapter: DashboardRecyclerViewAdaptor
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,5 +44,27 @@ class DashboardFragment : Fragment() {
         viewModel.fetchDashboardData(args.keypass)
         Log.d("DashboardFragment", "Keypass received: ${args.keypass}")
 
+        // Setup the recycler
+        val recycler = view.findViewById<RecyclerView>(R.id.recyclerDashboard)
+        recycler.layoutManager = LinearLayoutManager(requireContext())
+        adapter = DashboardRecyclerViewAdaptor(
+            onItemClick = {
+                // Handle item click here
+                Log.d("DashboardFragment", "Item clicked: $it")
+            }
+        )
+        recycler.adapter = adapter
+
+        // get the dashboard data with the keypass
+        viewModel.fetchDashboardData(args.keypass)
+
+        // submit the data to the recycler
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    adapter.setData(state.items)
+                }
+            }
+        }
     }
 }
